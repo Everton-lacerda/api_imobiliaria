@@ -15,17 +15,17 @@ const joiOptions = {
   messages: customMessages,
 };
 
-const createPropertySchema = Joi.object({
-  title: Joi.string().required(),
-  description: Joi.string().required(),
-  location: Joi.string().required(),
-  propertyType: Joi.string().valid("Casa", "Apartamento", "Terreno").required(),
-  bedrooms: Joi.number().integer().required(),
-  bathrooms: Joi.number().integer().required(),
-  price: Joi.number().min(0).required(),
-  imageUrl: Joi.string().uri().required(),
-}).options(joiOptions);
-
-module.exports = {
-  createPropertySchema,
+const PropertyValidation = {
+  createPropertySchema: Joi.object({
+    title: Joi.string().required(),
+    description: Joi.string().required(),
+    location: Joi.string().required(),
+    propertyType: Joi.string().valid("Casa", "Apartamento", "Terreno").required(),
+    bedrooms: Joi.number().integer().required(),
+    bathrooms: Joi.number().integer().required(),
+    price: Joi.number().min(0).required(),
+    imageUrl: Joi.string().uri().required(),
+  }).options(joiOptions),
 };
+
+module.exports = PropertyValidation;
