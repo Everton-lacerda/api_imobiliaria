@@ -6,6 +6,7 @@ const port = process.env.PORT || 3200;
 
 const homeRoutes = require("./routes/homeRoutes");
 const propertyRoutes = require("./routes/propertyRoutes");
+const contactRoutes = require("./routes/contactRoutes");
 
 // conection server and db
 const connectToDatabase = require("./db/db");
@@ -29,3 +30,4 @@ app.use(express.json());
 // Rotas
 app.use("/", homeRoutes);
 app.use("/properties", propertyRoutes);
+app.use("/contact", contactRoutes);

@@ -3,10 +3,14 @@ const dotenv = require("dotenv");
 
 dotenv.config();
 
+const { DB_USER, DB_PASSWORD, DB_HOST, DB_NAME } = process.env;
+const mongoURI = `mongodb+srv://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME}?retryWrites=true&w=majority`;
+
+
 const connect = async () => {
   try {
     mongoose.set("strictQuery", true);
-    await mongoose.connect(process.env.MONGO, {
+    await mongoose.connect(mongoURI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
