@@ -43,7 +43,6 @@ const PropertyController = {
       if (req.query.propertyType) {
         query.propertyType = req.query.propertyType;
       }
-
       const totalProperties = await Property.countDocuments(query);
 
       const properties = await Property.find(query)

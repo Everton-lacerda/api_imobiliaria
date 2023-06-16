@@ -1,5 +1,8 @@
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+
 const User = require('../models/User');
+
 const { registerSchema } = require('../validations/userValidation');
 
 const UserController = {
@@ -32,6 +35,35 @@ const UserController = {
       return res.status(500).json({ error: 'Erro ao registrar usuário' });
     }
   },
+
+  async login(req, res) {
+    try {
+      const { email, password } = req.body;
+
+      const user = await User.findOne({ email });
+      if (!user) {
+        return res.status(401).json({ error: 'Credenciais inválidas' });
+      }
+
+      const passwordMatch = await bcrypt.compare(password, user.password);
+      if (!passwordMatch) {
+        return res.status(401).json({ error: 'Credenciais inválidas' });
+      }
+
+      const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+      res.json({
+        id: user._id,
+        name: user.username,
+        email: user.email,
+        token
+      });
+    } catch (error) {
+      console.error('Erro ao fazer login:', error);
+      res.status(500).json({ error: 'Erro ao fazer login' });
+    }
+  }
+
 };
 
 module.exports = UserController;
