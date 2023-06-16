@@ -1,0 +1,23 @@
+# Arquivos de configuração
+config.js
+.env
+
+# Dependências e módulos
+/node_modules
+
+# Arquivos de compilação
+/dist
+
+# Arquivos temporários
+/.tmp
+/.cache
+/.DS_Store
+/.idea
+
+# Logs
+/log
+*.log
+
+# Arquivos de backup
+*.bak
+*.swp
