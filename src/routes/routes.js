@@ -19,6 +19,12 @@ router.post('/api/contact', ContactController.sendContactMessage);
 router.post('/api/register', UserController.register);
 router.post('/api/login', UserController.login);
 
-// Rotas protegidas adicionar authMiddleware a rota
+router.get('/api/users', authMiddleware, UserController.getAllUsers);
+router.put('/api/users/:id', authMiddleware, UserController.updateUser);
+router.delete('/api/users/:id', authMiddleware, UserController.deleteUser);
+
+router.post('/api/users/forgot-password', UserController.forgotPassword);
+router.post('/api/users/reset-password', UserController.resetPassword);
+
 
 module.exports = router;

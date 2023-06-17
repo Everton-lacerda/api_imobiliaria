@@ -1,19 +1,10 @@
-const nodemailer = require('nodemailer');
+const transporter = require('../config/emailConfig');
 
 const ContactController = {
   async sendContactMessage(req, res) {
     try {
       const { name, email, phone, message, emailSubject } = req.body;
       const recipientEmail = process.env.RECIPIENT_EMAIL;
-
-      const transporter = nodemailer.createTransport({
-        host: process.env.SMTP_HOST,
-        port: process.env.SMTP_PORT,
-        auth: {
-          user: process.env.SMTP_USER,
-          pass: process.env.SMTP_PASSWORD,
-        },
-      });
 
       const mailOptions = {
         from: email,
