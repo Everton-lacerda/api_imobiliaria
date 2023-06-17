@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
 
+const UserRolesEnum = require('../models/UserRolesEnum');
+const permissionsMiddleware = require('../middlewares/permissionsMiddleware');
+
 const PropertyController = require('../controllers/PropertyController');
 const ContactController = require('../controllers/ContactController');
 const UserController = require('../controllers/UserController');
@@ -26,5 +29,8 @@ router.delete('/api/users/:id', authMiddleware, UserController.deleteUser);
 router.post('/api/users/forgot-password', UserController.forgotPassword);
 router.post('/api/users/reset-password', UserController.resetPassword);
 
+router.get('/admin-only', authMiddleware, permissionsMiddleware([UserRolesEnum.ADMIN]), (req, res) => {
+    // Lógica da rota protegida aqui
+});
 
 module.exports = router;

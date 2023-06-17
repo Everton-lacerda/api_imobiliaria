@@ -19,18 +19,15 @@ const UserController = {
   async updateUser(req, res) {
     try {
       const { id } = req.params;
-      const { username } = req.body;
+      const { username, role } = req.body;
 
       const user = await User.findById(id);
       if (!user) {
         return res.status(404).json({ error: 'Usuário não encontrado' });
       }
 
-      if (user._id.toString() !== req.user._id.toString()) {
-        return res.status(403).json({ error: 'Você não tem permissão para atualizar esses dados' });
-      }
-
       user.username = username;
+      user.role = role;
 
       await user.save();
 
@@ -39,7 +36,7 @@ const UserController = {
       console.error('Erro ao atualizar o usuário:', error);
       res.status(500).json({ error: 'Ocorreu um erro ao atualizar o usuário' });
     }
-  },  
+  },
 
   async deleteUser(req, res) {
     try {
@@ -80,7 +77,13 @@ const UserController = {
 
       await newUser.save();
 
-      return res.status(201).json({ message: 'Usuário registrado com sucesso' });
+      return res.status(201).json({
+        message: 'Usuário registrado com sucesso',
+        id: newUser._id,
+        name: newUser.username,
+        email: newUser.email,
+        role: newUser.role,
+      });
     } catch (error) {
       console.error('Erro ao registrar usuário:', error);
       return res.status(500).json({ error: 'Erro ao registrar usuário' });
@@ -107,6 +110,7 @@ const UserController = {
         id: user._id,
         name: user.username,
         email: user.email,
+        role: user.role,
         token
       });
     } catch (error) {

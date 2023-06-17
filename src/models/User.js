@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const crypto = require('crypto');
 
+const UserRolesEnum = require('./UserRolesEnum')
+
 const userSchema = new mongoose.Schema({
   email: {
     type: String,
@@ -14,6 +16,11 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true,
+  },
+  role: {
+    type: String,
+    enum: Object.values(UserRolesEnum),
+    default: UserRolesEnum.COMUM,
   },
 });
 
