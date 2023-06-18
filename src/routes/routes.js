@@ -26,11 +26,15 @@ router.get('/api/users', authMiddleware, UserController.getAllUsers);
 router.put('/api/users/:id', authMiddleware, UserController.updateUser);
 router.delete('/api/users/:id', authMiddleware, UserController.deleteUser);
 
+router.get('/api/roles', (req, res) => {
+    res.json('roles')
+});
+
 router.post('/api/users/forgot-password', UserController.forgotPassword);
 router.post('/api/users/reset-password', UserController.resetPassword);
 
-router.get('/admin-only', authMiddleware, permissionsMiddleware([UserRolesEnum.ADMIN]), (req, res) => {
-    // Lógica da rota protegida aqui
+router.get('/admin', authMiddleware, permissionsMiddleware([UserRolesEnum.ADMIN]), (req, res) => {
+    // Lógica para renderizar a interface de administração aqui
 });
 
 module.exports = router;

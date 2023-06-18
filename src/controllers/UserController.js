@@ -6,13 +6,81 @@ const transporter = require('../config/emailConfig');
 const User = require('../models/User');
 
 const UserController = {
+  /**
+   * Obtém a lista de usuários com base nos parâmetros de consulta.
+   *
+   * @route GET /api/users
+   * @param {number} [page=1] - Opcional. Número da página a ser retornada. Padrão: 1.
+   * @param {number} [limit=10] - Opcional. Limite de usuários por página. Padrão: 10.
+   * @param {string} [sortField='createdAt'] - Opcional. Campo pelo qual os usuários devem ser ordenados. Padrão: 'createdAt'.
+   * @param {string} [sortOrder='asc'] - Opcional. Ordem de classificação dos usuários (ascendente ou descendente). Padrão: 'asc'.
+   * @param {string} [search=''] - Opcional. Termo de busca para filtrar os usuários pelo nome de usuário. Padrão: ''.
+   * @param {string} [role=''] - Opcional. Filtro para buscar apenas usuários com uma função específica. Padrão: ''.
+   * @returns {object} - Um objeto JSON contendo a página atual, limite, total de páginas e a lista de usuários.
+   * @throws {object} - Um objeto JSON contendo a mensagem de erro em caso de falha na busca dos usuários.
+   */
+
+  
   async getAllUsers(req, res) {
+    const roleOrder = {
+      comum: 1,
+      admin: 2,
+      corretor: 3,
+      financeiro: 4
+    };
+
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const sortField = req.query.sortField || 'createdAt';
+    const sortOrder = req.query.sortOrder || 'asc';
+    const search = req.query.search || '';
+    const role = req.query.role || '';
+  
     try {
-      const users = await User.find();
-      res.json(users);
+      let query = User.find();
+  
+      if (search) {
+        query = query.where('username', { $regex: search, $options: 'i' });
+      }
+  
+      if (role) {
+        query = query.where('role', role);
+      }
+
+      if (sortField === 'role') {
+        query = query.sort((a, b) => {
+          const roleA = a.role.toLowerCase();
+          const roleB = b.role.toLowerCase();
+  
+          if (roleOrder[roleA] && roleOrder[roleB]) {
+            return sortOrder === 'asc' ? roleOrder[roleA] - roleOrder[roleB] : roleOrder[roleB] - roleOrder[roleA];
+          }
+  
+          return 0;
+        });
+      } else {
+        query = query.sort({ [sortField]: sortOrder });
+      }
+  
+      const users = await query
+        .skip((page - 1) * limit)
+        .limit(limit)
+        .sort({ [sortField]: sortOrder });
+  
+      const count = await User.countDocuments(query);
+  
+      const totalPages = Math.ceil(count / limit);
+  
+      res.json({
+        page,
+        limit,
+        totalPages,
+        users,
+        isLastPage: page >= totalPages
+      });
     } catch (error) {
-      console.error('Erro ao buscar usuários:', error);
-      res.status(500).json({ error: 'Erro ao buscar usuários' });
+      console.error(error);
+      res.status(500).json({ error: 'Erro ao buscar os usuários' });
     }
   },
 
