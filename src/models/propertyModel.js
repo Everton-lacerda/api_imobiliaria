@@ -29,9 +29,21 @@ const propertySchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  imageUrl: {
+ imageUrl: [{
     type: String,
-    required: true,
+    required: false
+  }],
+  garage: {
+    type: Number,
+    default: 0,
+  },
+  isLand: {
+    type: Boolean,
+    default: false,
+  },
+  otherProperty: {
+    type: String,
+    default: '',
   },
 });
 

@@ -3,18 +3,47 @@ const { createPropertySchema } = require("../validations/PropertyValidation");
 
 const PropertyController = {
   async createProperty(req, res) {
-    try {
-      const { error } = createPropertySchema.validate(req.body);
-      if (error) {
-        return res.status(400).json({ error: error.details[0].message });
-      }
+    // try {
+    //   const { error } = createPropertySchema.validate(req.body);
+    //   if (error) {
+    //     return res.status(400).json({ error: error.details });
+    //   }
 
-      const property = new Property(req.body);
-      await property.save();
-      res.json(property);
-    } catch (error) {
-      res.status(500).json({ error: "Failed to create property" });
-    }
+    //   const property = new Property(req.body);
+    //   await property.save();
+    //   res.json(property);
+    // } catch (error) {
+    //   res.status(500).json({ error: "Failed to create property" });
+    // } 
+      try {
+        const { error } = createPropertySchema.validate(req.body);
+        if (error) {
+          return res.status(400).json({ error: error.details });
+        }
+  
+        // Obter as imagens enviadas pelo frontend
+        const images = req.files;
+  
+        // Resto da lógica para criar uma propriedade com as imagens
+        const property = new Property({
+          title: req.body.title,
+          description: req.body.description,
+          propertyType: req.body.propertyType,
+          price: req.body.price,
+          bathrooms: req.body.bathrooms,
+          bedrooms: req.body.bedrooms,
+          garage: req.body.garage,
+          isLand: req.body.isLand,
+          location: req.body.location,
+          otherProperty: req.body.otherProperty ,        
+          imageUrl: images.map((image) => image.path),
+        });
+  
+        await property.save();
+        res.json(property);
+      } catch (error) {
+        res.status(500).json({ error: "Failed to create property" });
+      } 
   },
 
   async getAllProperties(req, res) {

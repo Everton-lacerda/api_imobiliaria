@@ -10,10 +10,26 @@ const UserController = require('../controllers/UserController');
 
 const authMiddleware = require('../middlewares/authMiddleware');
 
+const multer = require('multer');
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'uploads/'); // Define o diretório onde as imagens serão salvas
+    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + '-' + file.originalname); // Define o nome do arquivo
+    },
+});
+
+console.log('storage', storage)
+
+const upload = multer({ storage });
+
 // Rotas públicas
 router.get('/api/properties/', PropertyController.getAllProperties);
 router.get('/api/properties/:id', PropertyController.getPropertyById);
-router.post('/api/properties/', PropertyController.createProperty);
+router.post('/api/properties/', upload.array('imageUrl'), PropertyController.createProperty);
+
 router.put('/api/properties/:id', PropertyController.updateProperty);
 router.delete('/api/properties/:id', PropertyController.deleteProperty);
 

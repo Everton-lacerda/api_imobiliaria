@@ -174,7 +174,7 @@ const UserController = {
 
       const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-      res.json({
+      res.status(200).json({
         id: user._id,
         name: user.username,
         email: user.email,
