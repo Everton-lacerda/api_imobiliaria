@@ -24,6 +24,7 @@ const PropertyValidation = {
     bedrooms: Joi.number().integer().required(),
     bathrooms: Joi.number().integer().required(),
     price: Joi.number().min(0).required(),
+    imageUrl: Joi.any(),
     garage: Joi.number().integer().min(0).optional(),
   }).options(joiOptions),
 };

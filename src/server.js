@@ -4,6 +4,7 @@ const port = process.env.PORT || 3200;
 const routes = require("./routes/routes");
 const cors = require('cors');
 const connectToDatabase = require("./db/db");
+
 connectToDatabase()
   .then(() => {
     app.listen(port, () => {
