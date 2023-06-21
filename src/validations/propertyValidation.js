@@ -23,7 +23,7 @@ const PropertyValidation = {
     propertyType: Joi.string().valid("Casa", "Apartamento", "Terreno").required(),
     bedrooms: Joi.number().integer().required(),
     bathrooms: Joi.number().integer().required(),
-    price: Joi.number().min(0).required(),
+    price: Joi.string().required(),
     imageUrl: Joi.any(),
     garage: Joi.number().integer().min(0).optional(),
   }).options(joiOptions),
