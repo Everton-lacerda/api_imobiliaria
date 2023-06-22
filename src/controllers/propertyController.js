@@ -2,39 +2,6 @@ const Property = require("../models/propertyModel");
 const { createPropertySchema } = require("../validations/PropertyValidation");
 
 const PropertyController = {
-  async createProperty(req, res) {
-    try {
-      const { error } = createPropertySchema.validate(req.body);
-      if (error) {
-        return res.status(400).json({ error: error.details });
-      }
-
-      // Obter as imagens enviadas pelo frontend
-      const imageUrls = req.files.map((file) => file.filename); 
-
-      // Resto da lógica para criar uma propriedade com as imagens
-      const property = new Property({
-        title: req.body.title,
-        description: req.body.description,
-        propertyType: req.body.propertyType,
-        price: req.body.price,
-        bathrooms: req.body.bathrooms,
-        bedrooms: req.body.bedrooms,
-        garage: req.body.garage,
-        isLand: req.body.isLand,
-        location: req.body.location,
-        otherProperty: req.body.otherProperty,
-        imageUrl: imageUrls
-      });
-
-      await property.save();
-      res.json(property);
-    } catch (error) {
-      console.log('error', error)
-      res.status(500).json({ error: "Failed to create property" });
-    }
-  },
-
   async getAllProperties(req, res) {
     try {
       const page = parseInt(req.query.page) || 1;
@@ -94,19 +61,64 @@ const PropertyController = {
     }
   },
 
+  async createProperty(req, res) {
+    try {
+      const { error } = createPropertySchema.validate(req.body);
+      if (error) {
+        return res.status(400).json({ error: error.details });
+      }
+
+      const imageUrls = req.files.map((file) => file.filename);
+
+      const property = new Property({
+        title: req.body.title,
+        description: req.body.description,
+        propertyType: req.body.propertyType,
+        price: req.body.price,
+        bathrooms: req.body.bathrooms,
+        bedrooms: req.body.bedrooms,
+        garage: req.body.garage,
+        isLand: req.body.isLand,
+        location: req.body.location,
+        otherProperty: req.body.otherProperty,
+        imageUrl: imageUrls
+      });
+
+      await property.save();
+      res.json(property);
+    } catch (error) {
+      console.log('error', error)
+      res.status(500).json({ error: "Failed to create property" });
+    }
+  },
+
   async updateProperty(req, res) {
     try {
       const id = req.params.id;
-      const updatedProperty = await Property.findByIdAndUpdate(id, req.body, {
-        new: true,
+      const imageUrls = req.files.map((file) => file.filename);
+      const updatedProperty = await Property.findByIdAndUpdate(id, {
+        title: req.body.title,
+        description: req.body.description,
+        propertyType: req.body.propertyType,
+        price: req.body.price,
+        bathrooms: req.body.bathrooms,
+        bedrooms: req.body.bedrooms,
+        garage: req.body.garage,
+        isLand: req.body.isLand,
+        location: req.body.location,
+        otherProperty: req.body.otherProperty,
+        imageUrl: imageUrls
+      }, {
+        new: true
       });
+
       if (updatedProperty) {
         res.json(updatedProperty);
       } else {
-        res.status(404).json({ error: "Property not found" });
+        res.status(404).json({ message: "Property not found", });
       }
     } catch (error) {
-      res.status(500).json({ error: "Failed to update property" });
+      res.status(500).json({ message: "Failed to update property", error });
     }
   },
 

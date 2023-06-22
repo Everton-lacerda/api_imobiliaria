@@ -28,7 +28,7 @@ router.get('/api/properties/', PropertyController.getAllProperties);
 router.get('/api/properties/:id', PropertyController.getPropertyById);
 router.post('/api/properties/', upload.array('imageUrl'), PropertyController.createProperty);
 
-router.put('/api/properties/:id', PropertyController.updateProperty);
+router.put('/api/properties/:id', upload.array('imageUrl'), PropertyController.updateProperty);
 router.delete('/api/properties/:id', PropertyController.deleteProperty);
 
 router.post('/api/contact', ContactController.sendContactMessage);
