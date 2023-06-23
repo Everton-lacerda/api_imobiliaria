@@ -14,10 +14,10 @@ const multer = require('multer');
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'uploads/'); // Define o diretório onde as imagens serão salvas
+        cb(null, 'uploads/');
     },
     filename: function (req, file, cb) {
-        cb(null, Date.now() + '-' + file.originalname); // Define o nome do arquivo
+        cb(null, Date.now() + '-' + file.originalname);
     },
 });
 
@@ -33,7 +33,7 @@ router.delete('/api/properties/:id', PropertyController.deleteProperty);
 
 router.post('/api/contact', ContactController.sendContactMessage);
 
-router.post('/api/register', UserController.register);
+router.post('/api/register', upload.single('photo'), UserController.register);
 router.post('/api/login', UserController.login);
 
 router.get('/api/users', authMiddleware, UserController.getAllUsers);

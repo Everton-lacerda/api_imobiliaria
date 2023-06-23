@@ -4,11 +4,6 @@ const crypto = require('crypto');
 const UserRolesEnum = require('./UserRolesEnum')
 
 const userSchema = new mongoose.Schema({
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-  },
   username: {
     type: String,
     required: true,
@@ -17,10 +12,34 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+  }, 
   role: {
     type: String,
     enum: Object.values(UserRolesEnum),
     default: UserRolesEnum.COMUM,
+  },
+  firstName: {
+    type: String,
+    required: false,
+  },
+  lastName: {
+    type: String,
+    required: false,
+  },
+  age: {
+    type: Number,
+    required: false,
+  },
+  address: {
+    type: String,
+    required: false,
+  },
+  photo: {
+    type: String,
   },
 });
 
@@ -36,3 +55,5 @@ userSchema.methods.generatePasswordResetToken = function() {
 const User = mongoose.model('User', userSchema);
 
 module.exports = User;
+
+
