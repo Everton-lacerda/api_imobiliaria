@@ -29,7 +29,7 @@ const propertySchema = new mongoose.Schema({
     type: String,
     required: true,
   },
- imageUrl: [{
+  imageUrl: [{
     type: String,
     required: false
   }],
@@ -44,6 +44,42 @@ const propertySchema = new mongoose.Schema({
   otherProperty: {
     type: String,
     default: '',
+  },
+  seller: {
+    type: Boolean,
+    required: false,
+  },
+  cpfCnpj: {
+    type: String,
+    required: false,
+  },
+  city: {
+    type: String,
+    required: false,
+  },
+  neighborhood: {
+    type: String,
+    required: false,
+  },
+  address: {
+    type: String,
+    required: false,
+  },
+  status: {
+    type: String,
+    required: false,
+  },
+  area: {
+    type: Number,
+    required: false,
+  },
+  suites: {
+    type: Number,
+    required: false,
+  },
+  pools: {
+    type: Number,
+    required: false,
   },
 });
 

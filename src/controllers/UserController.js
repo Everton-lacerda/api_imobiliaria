@@ -76,6 +76,21 @@ const UserController = {
     }
   },
 
+  async getUserById(req, res) {
+    try {
+      const id = req.params.id;
+      const user = await User.findById(id);
+      if (user) {
+        res.json(user);
+      } else {
+        res.status(404).json({ error: "user not found" });
+      }
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch user" });
+    }
+  },
+
+
   async updateUser(req, res) {
     try {
       const { id } = req.params;

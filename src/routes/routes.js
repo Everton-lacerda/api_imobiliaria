@@ -37,6 +37,7 @@ router.post('/api/register', upload.single('photo'), UserController.register);
 router.post('/api/login', UserController.login);
 
 router.get('/api/users', authMiddleware, UserController.getAllUsers);
+router.get('/api/users/:id', authMiddleware, UserController.getUserById);
 router.put('/api/users/:id', authMiddleware, UserController.updateUser);
 router.delete('/api/users/:id', authMiddleware, UserController.deleteUser);
 

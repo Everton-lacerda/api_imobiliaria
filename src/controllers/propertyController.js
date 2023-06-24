@@ -67,8 +67,10 @@ const PropertyController = {
       if (error) {
         return res.status(400).json({ error: error.details });
       }
-
-      const imageUrls = req.files.map((file) => file.filename);
+      const imageUrls = undefined;
+      if(req.files) {
+        imageUrls = req.files.map((file) => file.filename);
+      }
 
       const property = new Property({
         title: req.body.title,
@@ -81,6 +83,15 @@ const PropertyController = {
         isLand: req.body.isLand,
         location: req.body.location,
         otherProperty: req.body.otherProperty,
+        seller: req.body.seller,
+        cpfCnpj: req.body.cpfCnpj,
+        city: req.body.city,
+        neighborhood: req.body.neighborhood,
+        address: req.body.address,
+        status: req.body.status,
+        area: req.body.area,
+        suites: req.body.suites,
+        pools: req.body.pools,
         imageUrl: imageUrls
       });
 
@@ -88,7 +99,7 @@ const PropertyController = {
       res.json(property);
     } catch (error) {
       console.log('error', error)
-      res.status(500).json({ error: "Failed to create property" });
+      res.status(500).json({ message: "Failed to create property", error: error });
     }
   },
 
@@ -107,6 +118,15 @@ const PropertyController = {
         isLand: req.body.isLand,
         location: req.body.location,
         otherProperty: req.body.otherProperty,
+        seller: req.body.seller,
+        cpfCnpj: req.body.cpfCnpj,
+        city: req.body.city,
+        neighborhood: req.body.neighborhood,
+        address: req.body.address,
+        status: req.body.status,
+        area: req.body.area,
+        suites: req.body.suites,
+        pools: req.body.pools,
         imageUrl: imageUrls
       }, {
         new: true
